@@ -116,6 +116,3 @@ class Organizer:
         """Function that serializes all games"""
         with open("Organizer.Game_dict.pkl", 'wb') as f:
             pickle.dump(Organizer.Game_dict, f)
-
-# m = Organizer()
-# m.add_game("DS1", "D:/Projects/Universal-save-organizer/testing/ds1.txt")

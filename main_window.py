@@ -12,8 +12,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    games = ["DS1", "DS2", "DS3"]
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(678, 583)
@@ -30,7 +28,7 @@ class Ui_MainWindow(object):
         self.label_game.setGeometry(QtCore.QRect(20, 40, 111, 20))
         self.label_game.setObjectName("label_game")
         self.dropdown_profile = QtWidgets.QComboBox(self.centralwidget)
-        self.dropdown_profile.setGeometry(QtCore.QRect(280, 70, 281, 22))
+        self.dropdown_profile.setGeometry(QtCore.QRect(280, 70, 261, 22))
         self.dropdown_profile.setObjectName("dropdown_profile")
         self.dropdown_profile.addItem("")
         self.dropdown_profile.addItem("")
@@ -38,18 +36,18 @@ class Ui_MainWindow(object):
         self.label_profile = QtWidgets.QLabel(self.centralwidget)
         self.label_profile.setGeometry(QtCore.QRect(280, 40, 111, 20))
         self.label_profile.setObjectName("label_profile")
-        self.buton_profile = QtWidgets.QPushButton(self.centralwidget)
-        self.buton_profile.setGeometry(QtCore.QRect(570, 70, 75, 23))
-        self.buton_profile.setObjectName("buton_profile")
-        self.Section_view = QtWidgets.QListWidget(self.centralwidget)
-        self.Section_view.setGeometry(QtCore.QRect(20, 140, 631, 331))
-        self.Section_view.setObjectName("Section_view")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(20, 490, 291, 23))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(360, 490, 291, 23))
-        self.pushButton_2.setObjectName("pushButton_2")
+        self.button_profile = QtWidgets.QPushButton(self.centralwidget)
+        self.button_profile.setGeometry(QtCore.QRect(554, 70, 91, 23))
+        self.button_profile.setObjectName("button_profile")
+        self.section_view = QtWidgets.QListWidget(self.centralwidget)
+        self.section_view.setGeometry(QtCore.QRect(20, 140, 631, 331))
+        self.section_view.setObjectName("section_view")
+        self.button_import = QtWidgets.QPushButton(self.centralwidget)
+        self.button_import.setGeometry(QtCore.QRect(20, 490, 291, 23))
+        self.button_import.setObjectName("button_import")
+        self.button_load = QtWidgets.QPushButton(self.centralwidget)
+        self.button_load.setGeometry(QtCore.QRect(360, 490, 291, 23))
+        self.button_load.setObjectName("button_load")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 678, 21))
@@ -61,14 +59,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-    
-    def add_items(self):
-        for item in Ui_MainWindow.games:
-            self.Section_view.addItem(item)
-    
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Universal Save Organizer"))
         self.dropdown_game.setItemText(0, _translate("MainWindow", "Game1"))
         self.dropdown_game.setItemText(1, _translate("MainWindow", "Game2"))
         self.dropdown_game.setItemText(2, _translate("MainWindow", "Game3"))
@@ -77,10 +71,10 @@ class Ui_MainWindow(object):
         self.dropdown_profile.setItemText(1, _translate("MainWindow", "Profile2"))
         self.dropdown_profile.setItemText(2, _translate("MainWindow", "Profile3"))
         self.label_profile.setText(_translate("MainWindow", "Profile:"))
-        self.buton_profile.setText(_translate("MainWindow", "Edit profiles"))
-        self.pushButton.setText(_translate("MainWindow", "Import savefile"))
-        self.pushButton_2.setText(_translate("MainWindow", "Load savefile"))
-        self.add_items()
+        self.button_profile.setText(_translate("MainWindow", "Edit profiles..."))
+        self.button_import.setText(_translate("MainWindow", "Import savefile"))
+        self.button_load.setText(_translate("MainWindow", "Load savefile"))
+
 
 if __name__ == "__main__":
     import sys

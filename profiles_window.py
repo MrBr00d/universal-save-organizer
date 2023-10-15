@@ -11,11 +11,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(516, 395)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class Ui_profile_window(object):
+    def setupUi(self, profile_window):
+        profile_window.setObjectName("profile_window")
+        profile_window.resize(516, 395)
+        self.centralwidget = QtWidgets.QWidget(profile_window)
         self.centralwidget.setObjectName("centralwidget")
         self.box_games = QtWidgets.QComboBox(self.centralwidget)
         self.box_games.setGeometry(QtCore.QRect(30, 40, 191, 22))
@@ -41,36 +41,36 @@ class Ui_MainWindow(object):
         self.label_profile = QtWidgets.QLabel(self.centralwidget)
         self.label_profile.setGeometry(QtCore.QRect(30, 80, 47, 13))
         self.label_profile.setObjectName("label_profile")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        profile_window.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(profile_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 516, 21))
         self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        profile_window.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(profile_window)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        profile_window.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(profile_window)
+        QtCore.QMetaObject.connectSlotsByName(profile_window)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, profile_window):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.box_games.setItemText(0, _translate("MainWindow", "Game 1"))
-        self.box_games.setItemText(1, _translate("MainWindow", "Game 2"))
-        self.box_games.setItemText(2, _translate("MainWindow", "Game 3"))
-        self.label_game.setText(_translate("MainWindow", "Game:"))
-        self.button_new.setText(_translate("MainWindow", "New"))
-        self.button_delete.setText(_translate("MainWindow", "Delete"))
-        self.button_edit.setText(_translate("MainWindow", "Edit games..."))
-        self.label_profile.setText(_translate("MainWindow", "Profiles:"))
+        profile_window.setWindowTitle(_translate("profile_window", "Profiles"))
+        self.box_games.setItemText(0, _translate("profile_window", "Game 1"))
+        self.box_games.setItemText(1, _translate("profile_window", "Game 2"))
+        self.box_games.setItemText(2, _translate("profile_window", "Game 3"))
+        self.label_game.setText(_translate("profile_window", "Game:"))
+        self.button_new.setText(_translate("profile_window", "New"))
+        self.button_delete.setText(_translate("profile_window", "Delete"))
+        self.button_edit.setText(_translate("profile_window", "Edit games..."))
+        self.label_profile.setText(_translate("profile_window", "Profiles:"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    profile_window = QtWidgets.QMainWindow()
+    ui = Ui_profile_window()
+    ui.setupUi(profile_window)
+    profile_window.show()
     sys.exit(app.exec_())
