@@ -1,7 +1,7 @@
 import os
 import shutil
 import pickle
-import pathlib
+from pathlib import Path
 
 """Need to check about the save location. This should all be \\ not sure how tkinter handles this"""
 # def save_dict():
@@ -20,10 +20,10 @@ class Game:
         name: (str) name of the game.
         save_location: (str) path of the savefile location"""
         self.name = name
-        self.save_location = save_location
-        self.directory = '\\'.join(self.save_location.split("\\")[:-1])
+        self.save_location = Path(save_location)
+        self.directory = self.save_location.parent
         self.profiles = [item.name for item in os.scandir(self.directory) if item.is_dir()]
-        self.save_extention = "." + self.save_location.split("\\")[-1].split(".")[-1]
+        self.save_extention = self.save_location.suffix
 
     def get_name(self):
         return self.name
@@ -35,13 +35,14 @@ class Game:
         return self.profiles
     
     def set_location(self, save_location):
-        self.save_location = save_location
-        self.directory = '\\'.join(self.save_location.split("\\")[:-1])
+        self.save_location = Path(save_location)
+        self.directory = self.save_location.parent
+        self.profiles = [item.name for item in os.scandir(self.directory) if item.is_dir()]
         Organizer.save_dict()
     
     #Profile management functions 
     def create_profile(self, profile_name):
-        os.mkdir(os.path.join(self.directory, profile_name))
+        Path(self.directory, profile_name).mkdir()
         print("Profile added.")
 
     def remove_profile(self, profile_name):
@@ -57,7 +58,7 @@ class Game:
         """Imports the save to a profile and section. Profile can be any% for instance and section the part of the run to be saved.
         profile: (str) e.g. any%/all bosses.
         section: (str) e.g. intro/first bossfight/final boss"""
-        save_target = os.path.join(self.directory, profile, section, self.save_location.split("\\")[-1])
+        save_target = os.path.join(self.directory, profile, section, self.save_location.name)
         save_dir = os.path.join(self.directory, profile, section)
         if os.path.isdir(f"{self.directory}\\{profile}"):
             os.makedirs(save_dir, exist_ok=True)
@@ -66,7 +67,7 @@ class Game:
             print("Profile not found.")
 
     def load_save(self, profile, section):
-        save_target = os.path.join(self.directory, profile, section, self.save_location.split("\\")[-1])
+        save_target = os.path.join(self.directory, profile, section, self.save_location.name)
         shutil.copy(save_target, self.directory)
 
 class Organizer:
@@ -115,8 +116,3 @@ class Organizer:
         """Function that serializes all games"""
         with open("Organizer.Game_dict.pkl", 'wb') as f:
             pickle.dump(Organizer.Game_dict, f)
-
-# m = Organizer()
-# m.add_game("DS1", "D:\\Projects\\Universal-save-organizer\\tets\\DarkSouls\\dsII.txt")
-# m.add_game("DS2", "D:\\Projects\\Universal-save-organizer\\tets\\DarkSoulsII\\ds2.txt")
-# print(m.get_games())

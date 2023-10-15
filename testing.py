@@ -1,9 +1,10 @@
 import pathlib
 import os
-# class Testing:
-#     var1 = []
-#     def __init__(self, name):
-#         Testing.var1.append(name)
+import pickle
+class Testing:
+    var1 = []
+    def __init__(self, name):
+        Testing.var1.append(name)
 
 
 # a = Testing("Hello")
@@ -11,5 +12,7 @@ import os
 
 # print(Testing.var1)
 
-a = pathlib.Path("D:/Projects/Universal-save-organizer/test")
-print(os.path.join("C:\\hello\\subfolder"))
+def to_pickle(object, pickle_pth):
+    pickle_pth = pathlib.Path(pickle_pth)
+    pickle_data = pickle.dump(object)
+    pickle_pth.write_bytes(pickle_data)
