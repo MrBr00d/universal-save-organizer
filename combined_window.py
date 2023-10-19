@@ -414,12 +414,3 @@ class Ui_add_game_window(object):
         self.label_game.setText(_translate("add_game_window", "Game Name"))
         self.label_save.setText(_translate("add_game_window", "Savefile location"))
         self.Button_ok.setText(_translate("add_game_window", "OK"))
-if __name__ == "__main__":
-    import sys
-    a = Ui_game_window()
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
