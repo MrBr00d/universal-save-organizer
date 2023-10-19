@@ -102,8 +102,8 @@ class Organizer:
         else:
             print("Game not found.")
 
-    @staticmethod
-    def get_games():
+    # @staticmethod
+    def get_games(self):
         """Lists all games in the Games_dict file"""
         return list(Organizer.Game_dict.keys())
     

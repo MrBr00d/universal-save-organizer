@@ -73,7 +73,40 @@ class Ui_MainWindow(object):
         self.button_import.setText(_translate("MainWindow", "Import savefile"))
         self.button_load.setText(_translate("MainWindow", "Load savefile"))
 
-class Ui_profile_window(object):
+class Ui_profile_window(QtWidgets.QDialog):
+    def init_load(self):
+        # Qt.QMainWindow.__init__(self)
+        if m.Game_dict:
+            self.box_games.addItems(m.get_games())
+            self.list_profiles.addItems(m.Game_dict[self.box_games.currentText()].show_profile())
+        else:
+            pass
+
+    def refresh(self):
+        if not m.Game_dict:
+            self.box_games.clear()
+            self.list_profiles.clear()
+        elif self.box_games.currentIndex() == -1:
+            self.box_games.addItems(m.get_games())
+            self.list_profiles.clear()
+            self.list_profiles.addItems(m.Game_dict[self.box_games.currentText()].show_profile())
+        else:
+            li = self.box_games.currentIndex()
+            self.box_games.clear()
+            self.box_games.addItems(m.get_games())
+            self.box_games.setCurrentIndex(li)
+            self.list_profiles.clear()
+            self.list_profiles.addItems(m.Game_dict[self.box_games.currentText()].show_profile())
+
+    def add_profile(self):
+        name, _ = QtWidgets.QInputDialog.getText(
+        self, 'Input Dialog', 'Enter profile name:')  
+        if name:
+            m.Game_dict[self.box_games.currentText()].create_profile(name)
+
+    def remove_profile(self):
+        m.Game_dict[self.box_games.currentText()].remove_profile(self.list_profiles.currentItem().text())
+    
     def open_edit_game_window(self):
         self.edit_game_window = QtWidgets.QMainWindow()
         self.edit_game_window_ui = Ui_game_window()
@@ -88,9 +121,6 @@ class Ui_profile_window(object):
         self.box_games = QtWidgets.QComboBox(self.centralwidget)
         self.box_games.setGeometry(QtCore.QRect(30, 40, 191, 22))
         self.box_games.setObjectName("box_games")
-        self.box_games.addItem("")
-        self.box_games.addItem("")
-        self.box_games.addItem("")
         self.label_game = QtWidgets.QLabel(self.centralwidget)
         self.label_game.setGeometry(QtCore.QRect(30, 20, 47, 13))
         self.label_game.setObjectName("label_game")
@@ -100,11 +130,13 @@ class Ui_profile_window(object):
         self.button_new = QtWidgets.QPushButton(self.centralwidget)
         self.button_new.setGeometry(QtCore.QRect(420, 120, 91, 23))
         self.button_new.setObjectName("button_new")
+        self.button_new.clicked.connect(self.add_profile)
         self.button_delete = QtWidgets.QPushButton(self.centralwidget)
         self.button_delete.setGeometry(QtCore.QRect(420, 210, 91, 23))
         self.button_delete.setObjectName("button_delete")
+        self.button_delete.clicked.connect(self.remove_profile)
         self.button_edit = QtWidgets.QPushButton(self.centralwidget)
-        self.button_edit.setGeometry(QtCore.QRect(230, 40, 111, 23))
+        self.button_edit.setGeometry(QtCore.QRect(400, 40, 111, 23))
         self.button_edit.setObjectName("button_edit")
         self.button_edit.clicked.connect(self.open_edit_game_window)
         self.label_profile = QtWidgets.QLabel(self.centralwidget)
@@ -116,12 +148,18 @@ class Ui_profile_window(object):
         self.button_new_2 = QtWidgets.QPushButton(self.centralwidget)
         self.button_new_2.setGeometry(QtCore.QRect(420, 150, 91, 23))
         self.button_new_2.setObjectName("button_new_2")
+        self.button_new_2.clicked.connect(self.refresh)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(420, 190, 71, 16))
         self.label_2.setObjectName("label_2")
         self.button_delete_2 = QtWidgets.QPushButton(self.centralwidget)
         self.button_delete_2.setGeometry(QtCore.QRect(420, 240, 91, 23))
         self.button_delete_2.setObjectName("button_delete_2")
+        self.button_delete_2.clicked.connect(self.refresh)
+        self.button_refresh = QtWidgets.QPushButton(self.centralwidget)
+        self.button_refresh.setGeometry(QtCore.QRect(230, 40, 75, 23))
+        self.button_refresh.setObjectName("button_refresh")
+        self.button_refresh.clicked.connect(self.refresh)
         profile_window.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(profile_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 516, 21))
@@ -131,15 +169,13 @@ class Ui_profile_window(object):
         self.statusbar.setObjectName("statusbar")
         profile_window.setStatusBar(self.statusbar)
 
+        self.init_load()
         self.retranslateUi(profile_window)
         QtCore.QMetaObject.connectSlotsByName(profile_window)
 
     def retranslateUi(self, profile_window):
         _translate = QtCore.QCoreApplication.translate
         profile_window.setWindowTitle(_translate("profile_window", "Profiles"))
-        self.box_games.setItemText(0, _translate("profile_window", "Game 1"))
-        self.box_games.setItemText(1, _translate("profile_window", "Game 2"))
-        self.box_games.setItemText(2, _translate("profile_window", "Game 3"))
         self.label_game.setText(_translate("profile_window", "Game:"))
         self.button_new.setText(_translate("profile_window", "1. New profile"))
         self.button_delete.setText(_translate("profile_window", "1. Delete profile"))
@@ -149,6 +185,7 @@ class Ui_profile_window(object):
         self.button_new_2.setText(_translate("profile_window", "2. Refresh"))
         self.label_2.setText(_translate("profile_window", "Delete profile"))
         self.button_delete_2.setText(_translate("profile_window", "2. Refresh"))
+        self.button_refresh.setText(_translate("profile_window", "Refresh"))
 
 class Ui_game_window(object):
     def open_add_game_window(self):

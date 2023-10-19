@@ -36,7 +36,7 @@ class Ui_profile_window(object):
         self.button_delete.setGeometry(QtCore.QRect(420, 210, 91, 23))
         self.button_delete.setObjectName("button_delete")
         self.button_edit = QtWidgets.QPushButton(self.centralwidget)
-        self.button_edit.setGeometry(QtCore.QRect(230, 40, 111, 23))
+        self.button_edit.setGeometry(QtCore.QRect(400, 40, 111, 23))
         self.button_edit.setObjectName("button_edit")
         self.label_profile = QtWidgets.QLabel(self.centralwidget)
         self.label_profile.setGeometry(QtCore.QRect(30, 80, 47, 13))
@@ -53,6 +53,9 @@ class Ui_profile_window(object):
         self.button_delete_2 = QtWidgets.QPushButton(self.centralwidget)
         self.button_delete_2.setGeometry(QtCore.QRect(420, 240, 91, 23))
         self.button_delete_2.setObjectName("button_delete_2")
+        self.button_refresh = QtWidgets.QPushButton(self.centralwidget)
+        self.button_refresh.setGeometry(QtCore.QRect(230, 40, 75, 23))
+        self.button_refresh.setObjectName("button_refresh")
         profile_window.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(profile_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 516, 21))
@@ -80,6 +83,7 @@ class Ui_profile_window(object):
         self.button_new_2.setText(_translate("profile_window", "2. Refresh"))
         self.label_2.setText(_translate("profile_window", "Delete profile"))
         self.button_delete_2.setText(_translate("profile_window", "2. Refresh"))
+        self.button_refresh.setText(_translate("profile_window", "Refresh"))
 
 
 if __name__ == "__main__":
