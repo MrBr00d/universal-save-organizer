@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from Main import *
 
 m = Organizer()
-class Ui_MainWindow(object):    
+class Ui_MainWindow(QtWidgets.QDialog):    
     def open_add_profile_window(self):
         self.add_profile_window = QtWidgets.QMainWindow()
         self.add_profile_window_ui = Ui_profile_window()
@@ -16,7 +16,6 @@ class Ui_MainWindow(object):
             self.section_view.addItems(m.Game_dict[self.dropdown_game.currentText()].get_sections(self.dropdown_profile.currentText()))
         else:
             pass    
-# this does not work yet
     def refresh_main(self):
         if not m.Game_dict:
             self.dropdown_game.clear()
@@ -26,14 +25,62 @@ class Ui_MainWindow(object):
             self.dropdown_game.addItems(m.get_games())
             self.dropdown_profile.clear()
             self.dropdown_profile.addItems(m.Game_dict[self.dropdown_game.currentText()].show_profile())
-            # self.section_view.addItems(m.Game_dict[self.dropdown_game.currentText()].get_sections())
+            self.section_view.addItems(m.Game_dict[self.dropdown_game.currentText()].get_sections(self.dropdown_profile.currentText()))
         else:
-            li = self.dropdown_game.currentIndex()
+            li_g = self.dropdown_game.currentIndex()
+            li_p = self.dropdown_profile.currentIndex()
             self.dropdown_game.clear()
             self.dropdown_game.addItems(m.get_games())
-            self.dropdown_game.setCurrentIndex(li)
+            self.dropdown_game.setCurrentIndex(li_g)
             self.dropdown_profile.clear()
             self.dropdown_profile.addItems(m.Game_dict[self.dropdown_game.currentText()].show_profile())
+            self.dropdown_profile.setCurrentIndex(li_p)
+            self.section_view.clear()
+            self.section_view.addItems(m.Game_dict[self.dropdown_game.currentText()].get_sections(self.dropdown_profile.currentText()))
+
+    def add_section(self):
+        name, _ = QtWidgets.QInputDialog.getText(
+        self, 'Input Dialog', 'Enter Section name:')  
+        if name:
+            m.Game_dict[self.dropdown_game.currentText()].create_section(self.dropdown_profile.currentText(), name)
+            self.refresh_main()
+
+    def remove_section(self):
+        name = self.section_view.currentItem()
+        if name:
+            qm = QtWidgets.QMessageBox
+            ret = qm.question(self,'', "Are you you want to remove this secion? deleted secions cannot be recovered", qm.Yes | qm.No)
+            if ret == qm.Yes:
+                m.Game_dict[self.dropdown_game.currentText()].remove_section(self.dropdown_profile.currentText(), name.text())
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle("Success!")
+                msg.setText("Action Successful!")
+                msg.setIcon(QtWidgets.QMessageBox.Information)
+                _ = msg.exec_()
+                self.refresh_main()
+
+        else:
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("Failed!")
+            msg.setText("Operation failed, did you select a section?")
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            _ = msg.exec_()
+
+    def import_save(self):
+        m.Game_dict[self.dropdown_game.currentText()].import_save(self.dropdown_profile.currentText(), self.section_view.currentItem().text())
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle("Success!")
+        msg.setText("Action Successful!")
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        _ = msg.exec_()
+
+    def load_save(self):
+        m.Game_dict[self.dropdown_game.currentText()].load_save(self.dropdown_profile.currentText(), self.section_view.currentItem().text())
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle("Success!")
+        msg.setText("Action Successful!")
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        _ = msg.exec_()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -67,18 +114,22 @@ class Ui_MainWindow(object):
         self.button_import = QtWidgets.QPushButton(self.centralwidget)
         self.button_import.setGeometry(QtCore.QRect(20, 490, 231, 23))
         self.button_import.setObjectName("button_import")
+        self.button_import.clicked.connect(self.import_save)
         self.button_load = QtWidgets.QPushButton(self.centralwidget)
         self.button_load.setGeometry(QtCore.QRect(320, 490, 231, 23))
         self.button_load.setObjectName("button_load")
+        self.button_load.clicked.connect(self.load_save)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(560, 140, 111, 20))
         self.label.setObjectName("label")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(560, 170, 91, 23))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(self.add_section)
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(560, 210, 91, 23))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.remove_section)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 678, 21))
@@ -107,7 +158,6 @@ class Ui_MainWindow(object):
 
 class Ui_profile_window(QtWidgets.QDialog):
     def init_load(self):
-        # Qt.QMainWindow.__init__(self)
         if m.Game_dict:
             self.box_games.addItems(m.get_games())
             self.list_profiles.addItems(m.Game_dict[self.box_games.currentText()].show_profile())
@@ -139,22 +189,25 @@ class Ui_profile_window(QtWidgets.QDialog):
 
     def remove_profile(self):
         name = self.list_profiles.currentItem()
-        if name:
-            m.Game_dict[self.box_games.currentText()].remove_profile(self.list_profiles.currentItem().text())
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle("Success!")
-            msg.setText("Action Successful!")
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            _ = msg.exec_()
-            self.refresh()
+        qm = QtWidgets.QMessageBox
+        ret = qm.question(self,'', "Are you you want to remove this profile? deleted profiles cannot be recovered", qm.Yes | qm.No)
+        if ret == qm.Yes:
+            if name:
+                m.Game_dict[self.box_games.currentText()].remove_profile(self.list_profiles.currentItem().text())
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle("Success!")
+                msg.setText("Action Successful!")
+                msg.setIcon(QtWidgets.QMessageBox.Information)
+                _ = msg.exec_()
+                self.refresh()
 
         else:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle("Failed!")
             msg.setText("Operation failed, did you select a profile?")
             msg.setIcon(QtWidgets.QMessageBox.Warning)
-            _ = msg.exec_()            
-    
+            _ = msg.exec_()
+
     def open_edit_game_window(self):
         self.edit_game_window = QtWidgets.QMainWindow()
         self.edit_game_window_ui = Ui_game_window()
@@ -193,17 +246,9 @@ class Ui_profile_window(QtWidgets.QDialog):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(420, 100, 71, 16))
         self.label.setObjectName("label")
-        # self.button_new_2 = QtWidgets.QPushButton(self.centralwidget)
-        # self.button_new_2.setGeometry(QtCore.QRect(420, 150, 91, 23))
-        # self.button_new_2.setObjectName("button_new_2")
-        # self.button_new_2.clicked.connect(self.refresh)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(420, 190, 71, 16))
         self.label_2.setObjectName("label_2")
-        # self.button_delete_2 = QtWidgets.QPushButton(self.centralwidget)
-        # self.button_delete_2.setGeometry(QtCore.QRect(420, 240, 91, 23))
-        # self.button_delete_2.setObjectName("button_delete_2")
-        # self.button_delete_2.clicked.connect(self.refresh)
         self.button_refresh = QtWidgets.QPushButton(self.centralwidget)
         self.button_refresh.setGeometry(QtCore.QRect(230, 40, 75, 23))
         self.button_refresh.setObjectName("button_refresh")
@@ -243,7 +288,14 @@ class Ui_game_window(object):
         self.add_game_window.show()
 
     def delete_game(self):
-        m.remove_game(self.list_game.currentItem().text()) #m (organizer) needs to be instantiated at the start of the script
+        if self.list_game.currentItem():
+            m.remove_game(self.list_game.currentItem().text())
+        else:
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("Failed!")
+            msg.setText("Operation failed, did you select a game?")
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            _ = msg.exec_() 
 
     def refresh(self):
         self.list_game.clear()

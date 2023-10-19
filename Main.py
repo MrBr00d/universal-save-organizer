@@ -54,7 +54,13 @@ class Game:
         return [item.name for item in os.scandir(self.directory) if item.is_dir()]
     
     def get_sections(self, profile_name):
-        return[item.name for item in os.scandir(os.path.join(self.directory, profile_name)) if item.is_dir()]
+        return [item.name for item in os.scandir(os.path.join(self.directory, profile_name)) if item.is_dir()]
+    
+    def create_section(self, profile_name, section_name):
+        Path(self.directory, profile_name, section_name).mkdir()
+
+    def remove_section (self, profile_name, section_name):
+        shutil.rmtree(os.path.join(self.directory, profile_name, section_name))
     
     def import_save(self, profile, section):
         """Imports the save to a profile and section. Profile can be any% for instance and section the part of the run to be saved.
