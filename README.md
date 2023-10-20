@@ -11,6 +11,7 @@ To sucesfully run this python program ensure you have the following packages ins
 Installation and usage
 <ol>
   <li>Download rar from releases</li>
+  <li>Extract files in own folder</li>
   <li>run save organizer by running "Universal save organizer.pyw"</li>
   <li>Import games</li>
   <li>After each modification the dropdown menu can be refreshed by using the refresh button. This also shows recently added games.</li>
