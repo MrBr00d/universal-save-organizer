@@ -1,5 +1,7 @@
 *.pkl
 *.ui
+*.rar
 
 testing/
 testing.py
+__pycache__/
